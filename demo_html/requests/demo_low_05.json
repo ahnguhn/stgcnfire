@@ -1,0 +1,38 @@
+{
+  "request_id": "demo_low_05",
+  "description": "[하위 5] test 샘플 45391 · t0 30분 · 기상 H79 · 칸 F1 0.000 · 60분 내 새 착화 정답 0 / 예측 49",
+  "ignition_nodes": [
+    "B80-F1-U03"
+  ],
+  "burning_nodes": [
+    "B80-F1-U01",
+    "B80-F1-U02",
+    "B80-F2-U01",
+    "B80-F2-U02",
+    "B89-F1",
+    "B89-F2",
+    "B93-F1",
+    "B93-F2",
+    "B93-F3",
+    "B94-F1",
+    "B94-F2",
+    "B94-F3",
+    "B98-F1"
+  ],
+  "weather": {
+    "wind_speed_ms": 10.0,
+    "wind_dir_deg": 270.0,
+    "rh_pct": 90.0
+  },
+  "pick": {
+    "group": "하위",
+    "rank": 5,
+    "split": "test",
+    "sample_id": 45391,
+    "t0_s": 1800,
+    "weather_code": "H79",
+    "f1": 0.0,
+    "n_label_new_60min": 0,
+    "n_pred_new_60min": 49
+  }
+}

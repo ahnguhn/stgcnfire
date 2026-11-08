@@ -1,0 +1,180 @@
+{
+  "request_id": "demo_low_04",
+  "generated_at": "2026-11-08 19:47:43",
+  "input": {
+    "request_id": "demo_low_04",
+    "ignition_nodes": [
+      "B24-F1"
+    ],
+    "burning_nodes": [],
+    "weather": {
+      "wind_speed_ms": 2.0,
+      "wind_dir_deg": 0.0,
+      "rh_pct": 60.0
+    },
+    "pick": {
+      "group": "하위",
+      "rank": 4,
+      "split": "test",
+      "sample_id": 12408,
+      "t0_s": 0,
+      "weather_code": "L16",
+      "f1": 0.0,
+      "n_label_new_60min": 0,
+      "n_pred_new_60min": 1
+    }
+  },
+  "model": {
+    "graph_dir": "D:\\workspace2026\\fire\\prototype2\\predict\\graph",
+    "model_path": "D:\\workspace2026\\fire\\prototype2\\training\\model\\best_model.pt",
+    "n_nodes": 873,
+    "horizon_steps": 12,
+    "step_minutes": 5,
+    "threshold": 0.5
+  },
+  "summary": {
+    "request_id": "demo_low_04",
+    "ignition_nodes": [
+      "B24-F1"
+    ],
+    "ignition_resolved": [
+      "B24-F1"
+    ],
+    "burning_nodes_resolved": [],
+    "n_burning_t0": 1,
+    "weather": {
+      "wind_speed_ms": 2.0,
+      "wind_dir_deg": 0.0,
+      "rh_pct": 60.0
+    },
+    "weather_used": {
+      "wind_speed_ms": 2.0,
+      "wind_dir_deg": 0.0,
+      "rh_pct": 60.0,
+      "wind_speed_ms_input": 2.0,
+      "wind_dir_deg_input": 0.0,
+      "rh_pct_input": 60.0
+    },
+    "threshold": 0.5,
+    "predicted_spread_nodes": [
+      {
+        "node": "B18-F1-U01",
+        "floor_id": "B18-F1",
+        "building": "B18",
+        "node_kind": "unit",
+        "first_step": 12,
+        "within_min": 60,
+        "eta_min": 43.9,
+        "max_prob": 0.5011
+      }
+    ],
+    "n_spread_nodes": 1,
+    "n_spread_units": 1,
+    "interior_spread_same_floor": [],
+    "n_interior_units_same_floor": 0,
+    "floor_summary": [
+      {
+        "floor_id": "B18-F1",
+        "building": "B18",
+        "within_min": 60,
+        "first_node": "B18-F1-U01",
+        "eta_min": 43.9,
+        "n_units": 1
+      }
+    ],
+    "n_spread_floors": 1,
+    "building_summary": [
+      {
+        "building": "B18",
+        "within_min": 60,
+        "first_node": "B18-F1-U01",
+        "eta_min": 43.9
+      }
+    ],
+    "n_spread_buildings": 1
+  },
+  "probs": {
+    "B18-F1-U01": [
+      0.0014,
+      0.0018,
+      0.01,
+      0.017,
+      0.0428,
+      0.1731,
+      0.2671,
+      0.367,
+      0.4445,
+      0.4732,
+      0.4815,
+      0.5011
+    ],
+    "B18-F1-U02": [
+      0.0017,
+      0.0017,
+      0.0077,
+      0.0134,
+      0.0377,
+      0.1513,
+      0.2425,
+      0.3342,
+      0.409,
+      0.4358,
+      0.4462,
+      0.465
+    ],
+    "B18-F1-U04": [
+      0.0031,
+      0.0039,
+      0.0165,
+      0.0171,
+      0.0329,
+      0.0747,
+      0.1456,
+      0.2284,
+      0.2181,
+      0.197,
+      0.1778,
+      0.1762
+    ],
+    "B24-F1": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "nodes": [
+    {
+      "id": "B18-F1-U01",
+      "kind": "unit",
+      "building": "B18",
+      "floor_id": "B18-F1"
+    },
+    {
+      "id": "B18-F1-U02",
+      "kind": "unit",
+      "building": "B18",
+      "floor_id": "B18-F1"
+    },
+    {
+      "id": "B18-F1-U04",
+      "kind": "unit",
+      "building": "B18",
+      "floor_id": "B18-F1"
+    },
+    {
+      "id": "B24-F1",
+      "kind": "floor",
+      "building": "B24",
+      "floor_id": "B24-F1"
+    }
+  ]
+}

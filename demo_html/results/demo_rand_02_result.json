@@ -1,0 +1,1211 @@
+{
+  "request_id": "demo_rand_02",
+  "generated_at": "2026-11-08 19:47:43",
+  "input": {
+    "request_id": "demo_rand_02",
+    "ignition_nodes": [
+      "B80-F1-U02"
+    ],
+    "burning_nodes": [],
+    "weather": {
+      "wind_speed_ms": 10.0,
+      "wind_dir_deg": 0,
+      "rh_pct": 90.0
+    },
+    "pick": {
+      "group": "랜덤",
+      "rank": 2,
+      "seed": 42
+    }
+  },
+  "model": {
+    "graph_dir": "D:\\workspace2026\\fire\\prototype2\\predict\\graph",
+    "model_path": "D:\\workspace2026\\fire\\prototype2\\training\\model\\best_model.pt",
+    "n_nodes": 873,
+    "horizon_steps": 12,
+    "step_minutes": 5,
+    "threshold": 0.5
+  },
+  "summary": {
+    "request_id": "demo_rand_02",
+    "ignition_nodes": [
+      "B80-F1-U02"
+    ],
+    "ignition_resolved": [
+      "B80-F1-U02"
+    ],
+    "burning_nodes_resolved": [],
+    "n_burning_t0": 1,
+    "weather": {
+      "wind_speed_ms": 10.0,
+      "wind_dir_deg": 0,
+      "rh_pct": 90.0
+    },
+    "weather_used": {
+      "wind_speed_ms": 10.0,
+      "wind_dir_deg": 0.0,
+      "rh_pct": 90.0,
+      "wind_speed_ms_input": 10.0,
+      "wind_dir_deg_input": 0,
+      "rh_pct_input": 90.0
+    },
+    "threshold": 0.5,
+    "predicted_spread_nodes": [
+      {
+        "node": "B80-F1-U01",
+        "floor_id": "B80-F1",
+        "building": "B80",
+        "node_kind": "unit",
+        "first_step": 1,
+        "within_min": 5,
+        "eta_min": 3.2,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B80-F1-U03",
+        "floor_id": "B80-F1",
+        "building": "B80",
+        "node_kind": "unit",
+        "first_step": 1,
+        "within_min": 5,
+        "eta_min": 4.2,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B80-F2-U01",
+        "floor_id": "B80-F2",
+        "building": "B80",
+        "node_kind": "unit",
+        "first_step": 4,
+        "within_min": 20,
+        "eta_min": 19.6,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B80-F2-U02",
+        "floor_id": "B80-F2",
+        "building": "B80",
+        "node_kind": "unit",
+        "first_step": 3,
+        "within_min": 15,
+        "eta_min": 14.0,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B84-F1-U01",
+        "floor_id": "B84-F1",
+        "building": "B84",
+        "node_kind": "unit",
+        "first_step": 10,
+        "within_min": 50,
+        "eta_min": 44.9,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B84-F1-U02",
+        "floor_id": "B84-F1",
+        "building": "B84",
+        "node_kind": "unit",
+        "first_step": 9,
+        "within_min": 45,
+        "eta_min": 47.6,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B84-F1-U03",
+        "floor_id": "B84-F1",
+        "building": "B84",
+        "node_kind": "unit",
+        "first_step": 10,
+        "within_min": 50,
+        "eta_min": 43.5,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B84-F1-U04",
+        "floor_id": "B84-F1",
+        "building": "B84",
+        "node_kind": "unit",
+        "first_step": 9,
+        "within_min": 45,
+        "eta_min": 42.0,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B84-F1-U05",
+        "floor_id": "B84-F1",
+        "building": "B84",
+        "node_kind": "unit",
+        "first_step": 9,
+        "within_min": 45,
+        "eta_min": 45.2,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B84-F2",
+        "floor_id": "B84-F2",
+        "building": "B84",
+        "node_kind": "floor",
+        "first_step": 7,
+        "within_min": 35,
+        "eta_min": 36.2,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B84-F3",
+        "floor_id": "B84-F3",
+        "building": "B84",
+        "node_kind": "floor",
+        "first_step": 11,
+        "within_min": 55,
+        "eta_min": 49.6,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B89-F1",
+        "floor_id": "B89-F1",
+        "building": "B89",
+        "node_kind": "floor",
+        "first_step": 2,
+        "within_min": 10,
+        "eta_min": 8.2,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B89-F2",
+        "floor_id": "B89-F2",
+        "building": "B89",
+        "node_kind": "floor",
+        "first_step": 3,
+        "within_min": 15,
+        "eta_min": 8.6,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B93-F1",
+        "floor_id": "B93-F1",
+        "building": "B93",
+        "node_kind": "floor",
+        "first_step": 4,
+        "within_min": 20,
+        "eta_min": 18.9,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B93-F2",
+        "floor_id": "B93-F2",
+        "building": "B93",
+        "node_kind": "floor",
+        "first_step": 4,
+        "within_min": 20,
+        "eta_min": 16.6,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B93-F3",
+        "floor_id": "B93-F3",
+        "building": "B93",
+        "node_kind": "floor",
+        "first_step": 5,
+        "within_min": 25,
+        "eta_min": 23.5,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B94-F1",
+        "floor_id": "B94-F1",
+        "building": "B94",
+        "node_kind": "floor",
+        "first_step": 3,
+        "within_min": 15,
+        "eta_min": 11.4,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B94-F2",
+        "floor_id": "B94-F2",
+        "building": "B94",
+        "node_kind": "floor",
+        "first_step": 3,
+        "within_min": 15,
+        "eta_min": 11.4,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B94-F3",
+        "floor_id": "B94-F3",
+        "building": "B94",
+        "node_kind": "floor",
+        "first_step": 4,
+        "within_min": 20,
+        "eta_min": 16.2,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B98-F1",
+        "floor_id": "B98-F1",
+        "building": "B98",
+        "node_kind": "floor",
+        "first_step": 3,
+        "within_min": 15,
+        "eta_min": 10.3,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B108-F1",
+        "floor_id": "B108-F1",
+        "building": "B108",
+        "node_kind": "floor",
+        "first_step": 10,
+        "within_min": 50,
+        "eta_min": 45.0,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B108-F2",
+        "floor_id": "B108-F2",
+        "building": "B108",
+        "node_kind": "floor",
+        "first_step": 11,
+        "within_min": 55,
+        "eta_min": 48.2,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B116-F1",
+        "floor_id": "B116-F1",
+        "building": "B116",
+        "node_kind": "floor",
+        "first_step": 12,
+        "within_min": 60,
+        "eta_min": 51.0,
+        "max_prob": 0.7214
+      },
+      {
+        "node": "B122-F1-U01",
+        "floor_id": "B122-F1",
+        "building": "B122",
+        "node_kind": "unit",
+        "first_step": 12,
+        "within_min": 60,
+        "eta_min": 49.2,
+        "max_prob": 0.7407
+      },
+      {
+        "node": "B122-F1-U02",
+        "floor_id": "B122-F1",
+        "building": "B122",
+        "node_kind": "unit",
+        "first_step": 12,
+        "within_min": 60,
+        "eta_min": 49.6,
+        "max_prob": 0.7234
+      },
+      {
+        "node": "B122-F1-U03",
+        "floor_id": "B122-F1",
+        "building": "B122",
+        "node_kind": "unit",
+        "first_step": 12,
+        "within_min": 60,
+        "eta_min": 50.7,
+        "max_prob": 0.7105
+      },
+      {
+        "node": "B122-F1-U04",
+        "floor_id": "B122-F1",
+        "building": "B122",
+        "node_kind": "unit",
+        "first_step": 12,
+        "within_min": 60,
+        "eta_min": 49.6,
+        "max_prob": 0.7205
+      },
+      {
+        "node": "B122-F2",
+        "floor_id": "B122-F2",
+        "building": "B122",
+        "node_kind": "floor",
+        "first_step": 12,
+        "within_min": 60,
+        "eta_min": 53.7,
+        "max_prob": 0.5575
+      }
+    ],
+    "n_spread_nodes": 28,
+    "n_spread_units": 13,
+    "interior_spread_same_floor": [
+      {
+        "node": "B80-F1-U01",
+        "floor_id": "B80-F1",
+        "building": "B80",
+        "node_kind": "unit",
+        "first_step": 1,
+        "within_min": 5,
+        "eta_min": 3.2,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B80-F1-U03",
+        "floor_id": "B80-F1",
+        "building": "B80",
+        "node_kind": "unit",
+        "first_step": 1,
+        "within_min": 5,
+        "eta_min": 4.2,
+        "max_prob": 1.0
+      }
+    ],
+    "n_interior_units_same_floor": 2,
+    "floor_summary": [
+      {
+        "floor_id": "B80-F1",
+        "building": "B80",
+        "within_min": 5,
+        "first_node": "B80-F1-U01",
+        "eta_min": 3.2,
+        "n_units": 2
+      },
+      {
+        "floor_id": "B89-F1",
+        "building": "B89",
+        "within_min": 10,
+        "first_node": "B89-F1",
+        "eta_min": 8.2,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B80-F2",
+        "building": "B80",
+        "within_min": 15,
+        "first_node": "B80-F2-U02",
+        "eta_min": 14.0,
+        "n_units": 2
+      },
+      {
+        "floor_id": "B89-F2",
+        "building": "B89",
+        "within_min": 15,
+        "first_node": "B89-F2",
+        "eta_min": 8.6,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B94-F1",
+        "building": "B94",
+        "within_min": 15,
+        "first_node": "B94-F1",
+        "eta_min": 11.4,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B94-F2",
+        "building": "B94",
+        "within_min": 15,
+        "first_node": "B94-F2",
+        "eta_min": 11.4,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B98-F1",
+        "building": "B98",
+        "within_min": 15,
+        "first_node": "B98-F1",
+        "eta_min": 10.3,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B93-F1",
+        "building": "B93",
+        "within_min": 20,
+        "first_node": "B93-F1",
+        "eta_min": 18.9,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B93-F2",
+        "building": "B93",
+        "within_min": 20,
+        "first_node": "B93-F2",
+        "eta_min": 16.6,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B94-F3",
+        "building": "B94",
+        "within_min": 20,
+        "first_node": "B94-F3",
+        "eta_min": 16.2,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B93-F3",
+        "building": "B93",
+        "within_min": 25,
+        "first_node": "B93-F3",
+        "eta_min": 23.5,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B84-F2",
+        "building": "B84",
+        "within_min": 35,
+        "first_node": "B84-F2",
+        "eta_min": 36.2,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B84-F1",
+        "building": "B84",
+        "within_min": 45,
+        "first_node": "B84-F1-U02",
+        "eta_min": 47.6,
+        "n_units": 5
+      },
+      {
+        "floor_id": "B108-F1",
+        "building": "B108",
+        "within_min": 50,
+        "first_node": "B108-F1",
+        "eta_min": 45.0,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B108-F2",
+        "building": "B108",
+        "within_min": 55,
+        "first_node": "B108-F2",
+        "eta_min": 48.2,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B84-F3",
+        "building": "B84",
+        "within_min": 55,
+        "first_node": "B84-F3",
+        "eta_min": 49.6,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B116-F1",
+        "building": "B116",
+        "within_min": 60,
+        "first_node": "B116-F1",
+        "eta_min": 51.0,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B122-F1",
+        "building": "B122",
+        "within_min": 60,
+        "first_node": "B122-F1-U01",
+        "eta_min": 49.2,
+        "n_units": 4
+      },
+      {
+        "floor_id": "B122-F2",
+        "building": "B122",
+        "within_min": 60,
+        "first_node": "B122-F2",
+        "eta_min": 53.7,
+        "n_units": 0
+      }
+    ],
+    "n_spread_floors": 19,
+    "building_summary": [
+      {
+        "building": "B89",
+        "within_min": 10,
+        "first_node": "B89-F1",
+        "eta_min": 8.2
+      },
+      {
+        "building": "B94",
+        "within_min": 15,
+        "first_node": "B94-F1",
+        "eta_min": 11.4
+      },
+      {
+        "building": "B98",
+        "within_min": 15,
+        "first_node": "B98-F1",
+        "eta_min": 10.3
+      },
+      {
+        "building": "B93",
+        "within_min": 20,
+        "first_node": "B93-F1",
+        "eta_min": 18.9
+      },
+      {
+        "building": "B84",
+        "within_min": 35,
+        "first_node": "B84-F2",
+        "eta_min": 36.2
+      },
+      {
+        "building": "B108",
+        "within_min": 50,
+        "first_node": "B108-F1",
+        "eta_min": 45.0
+      },
+      {
+        "building": "B116",
+        "within_min": 60,
+        "first_node": "B116-F1",
+        "eta_min": 51.0
+      },
+      {
+        "building": "B122",
+        "within_min": 60,
+        "first_node": "B122-F1-U01",
+        "eta_min": 49.2
+      }
+    ],
+    "n_spread_buildings": 8
+  },
+  "probs": {
+    "B64-F1-U01": [
+      0.0003,
+      0.0295,
+      0.0495,
+      0.0533,
+      0.0368,
+      0.0253,
+      0.0244,
+      0.0365,
+      0.0858,
+      0.161,
+      0.1611,
+      0.1249
+    ],
+    "B80-F1-U01": [
+      0.7448,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B80-F1-U02": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B80-F1-U03": [
+      0.7986,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B80-F2-U01": [
+      0.0003,
+      0.0651,
+      0.1221,
+      0.6763,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B80-F2-U02": [
+      0.1067,
+      0.2438,
+      0.6963,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B84-F1-U01": [
+      0.0077,
+      0.0112,
+      0.0122,
+      0.0073,
+      0.0272,
+      0.0668,
+      0.1407,
+      0.2956,
+      0.447,
+      0.6844,
+      1.0,
+      1.0
+    ],
+    "B84-F1-U02": [
+      0.0027,
+      0.0266,
+      0.0383,
+      0.0288,
+      0.0347,
+      0.0711,
+      0.1909,
+      0.3524,
+      0.518,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B84-F1-U03": [
+      0.0077,
+      0.0127,
+      0.0129,
+      0.0081,
+      0.0201,
+      0.0539,
+      0.1294,
+      0.2938,
+      0.4559,
+      0.6593,
+      1.0,
+      1.0
+    ],
+    "B84-F1-U04": [
+      0.0056,
+      0.0272,
+      0.0442,
+      0.032,
+      0.0614,
+      0.1171,
+      0.1986,
+      0.3503,
+      0.5484,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B84-F1-U05": [
+      0.0058,
+      0.029,
+      0.0535,
+      0.0394,
+      0.0756,
+      0.1316,
+      0.2086,
+      0.3653,
+      0.5667,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B84-F2": [
+      0.0003,
+      0.0332,
+      0.0241,
+      0.0746,
+      0.1843,
+      0.3471,
+      0.5373,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B84-F3": [
+      0.0,
+      0.0002,
+      0.0005,
+      0.0042,
+      0.0073,
+      0.0095,
+      0.0135,
+      0.1162,
+      0.2492,
+      0.4821,
+      0.7093,
+      1.0
+    ],
+    "B89-F1": [
+      0.2068,
+      0.6293,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B89-F2": [
+      0.1792,
+      0.4895,
+      0.8991,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B93-F1": [
+      0.0028,
+      0.068,
+      0.2609,
+      0.676,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B93-F2": [
+      0.0041,
+      0.1072,
+      0.3807,
+      0.7268,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B93-F3": [
+      0.0002,
+      0.0005,
+      0.0006,
+      0.0589,
+      0.6297,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B94-F1": [
+      0.0068,
+      0.3829,
+      0.7691,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B94-F2": [
+      0.0433,
+      0.3322,
+      0.7861,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B94-F3": [
+      0.0009,
+      0.0015,
+      0.0012,
+      0.6802,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B98-F1": [
+      0.0,
+      0.0003,
+      0.7059,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B108-F1": [
+      0.0,
+      0.0,
+      0.0005,
+      0.0039,
+      0.011,
+      0.0328,
+      0.0932,
+      0.186,
+      0.3995,
+      0.5688,
+      1.0,
+      1.0
+    ],
+    "B108-F2": [
+      0.0,
+      0.0001,
+      0.0008,
+      0.0037,
+      0.0048,
+      0.0052,
+      0.023,
+      0.0943,
+      0.2199,
+      0.4515,
+      0.684,
+      1.0
+    ],
+    "B116-F1": [
+      0.0,
+      0.0011,
+      0.0017,
+      0.0016,
+      0.0024,
+      0.0022,
+      0.0023,
+      0.0023,
+      0.0023,
+      0.0025,
+      0.4852,
+      0.7214
+    ],
+    "B122-F1-U01": [
+      0.0009,
+      0.0006,
+      0.0005,
+      0.0002,
+      0.0002,
+      0.0001,
+      0.0001,
+      0.0001,
+      0.0001,
+      0.0001,
+      0.4529,
+      0.7407
+    ],
+    "B122-F1-U02": [
+      0.0005,
+      0.0004,
+      0.0005,
+      0.0003,
+      0.0002,
+      0.0002,
+      0.0002,
+      0.0002,
+      0.0002,
+      0.0002,
+      0.4269,
+      0.7234
+    ],
+    "B122-F1-U03": [
+      0.0004,
+      0.0002,
+      0.0005,
+      0.0005,
+      0.0005,
+      0.0005,
+      0.0004,
+      0.0004,
+      0.0004,
+      0.0005,
+      0.4398,
+      0.7105
+    ],
+    "B122-F1-U04": [
+      0.0006,
+      0.0005,
+      0.0004,
+      0.0002,
+      0.0002,
+      0.0001,
+      0.0001,
+      0.0001,
+      0.0001,
+      0.0001,
+      0.4279,
+      0.7205
+    ],
+    "B122-F2": [
+      0.0,
+      0.0002,
+      0.0003,
+      0.0002,
+      0.0003,
+      0.0003,
+      0.0004,
+      0.0003,
+      0.0004,
+      0.0004,
+      0.3383,
+      0.5575
+    ],
+    "B122-F3-U01": [
+      0.0,
+      0.0001,
+      0.0001,
+      0.0002,
+      0.0003,
+      0.0003,
+      0.0004,
+      0.0004,
+      0.0005,
+      0.0005,
+      0.0005,
+      0.3171
+    ],
+    "B122-F3-U02": [
+      0.0001,
+      0.0002,
+      0.0002,
+      0.0002,
+      0.0003,
+      0.0004,
+      0.0004,
+      0.0004,
+      0.0004,
+      0.0004,
+      0.0004,
+      0.3015
+    ]
+  },
+  "nodes": [
+    {
+      "id": "B64-F1-U01",
+      "kind": "unit",
+      "building": "B64",
+      "floor_id": "B64-F1"
+    },
+    {
+      "id": "B80-F1-U01",
+      "kind": "unit",
+      "building": "B80",
+      "floor_id": "B80-F1"
+    },
+    {
+      "id": "B80-F1-U02",
+      "kind": "unit",
+      "building": "B80",
+      "floor_id": "B80-F1"
+    },
+    {
+      "id": "B80-F1-U03",
+      "kind": "unit",
+      "building": "B80",
+      "floor_id": "B80-F1"
+    },
+    {
+      "id": "B80-F2-U01",
+      "kind": "unit",
+      "building": "B80",
+      "floor_id": "B80-F2"
+    },
+    {
+      "id": "B80-F2-U02",
+      "kind": "unit",
+      "building": "B80",
+      "floor_id": "B80-F2"
+    },
+    {
+      "id": "B84-F1-U01",
+      "kind": "unit",
+      "building": "B84",
+      "floor_id": "B84-F1"
+    },
+    {
+      "id": "B84-F1-U02",
+      "kind": "unit",
+      "building": "B84",
+      "floor_id": "B84-F1"
+    },
+    {
+      "id": "B84-F1-U03",
+      "kind": "unit",
+      "building": "B84",
+      "floor_id": "B84-F1"
+    },
+    {
+      "id": "B84-F1-U04",
+      "kind": "unit",
+      "building": "B84",
+      "floor_id": "B84-F1"
+    },
+    {
+      "id": "B84-F1-U05",
+      "kind": "unit",
+      "building": "B84",
+      "floor_id": "B84-F1"
+    },
+    {
+      "id": "B84-F2",
+      "kind": "floor",
+      "building": "B84",
+      "floor_id": "B84-F2"
+    },
+    {
+      "id": "B84-F3",
+      "kind": "floor",
+      "building": "B84",
+      "floor_id": "B84-F3"
+    },
+    {
+      "id": "B89-F1",
+      "kind": "floor",
+      "building": "B89",
+      "floor_id": "B89-F1"
+    },
+    {
+      "id": "B89-F2",
+      "kind": "floor",
+      "building": "B89",
+      "floor_id": "B89-F2"
+    },
+    {
+      "id": "B93-F1",
+      "kind": "floor",
+      "building": "B93",
+      "floor_id": "B93-F1"
+    },
+    {
+      "id": "B93-F2",
+      "kind": "floor",
+      "building": "B93",
+      "floor_id": "B93-F2"
+    },
+    {
+      "id": "B93-F3",
+      "kind": "floor",
+      "building": "B93",
+      "floor_id": "B93-F3"
+    },
+    {
+      "id": "B94-F1",
+      "kind": "floor",
+      "building": "B94",
+      "floor_id": "B94-F1"
+    },
+    {
+      "id": "B94-F2",
+      "kind": "floor",
+      "building": "B94",
+      "floor_id": "B94-F2"
+    },
+    {
+      "id": "B94-F3",
+      "kind": "floor",
+      "building": "B94",
+      "floor_id": "B94-F3"
+    },
+    {
+      "id": "B98-F1",
+      "kind": "floor",
+      "building": "B98",
+      "floor_id": "B98-F1"
+    },
+    {
+      "id": "B108-F1",
+      "kind": "floor",
+      "building": "B108",
+      "floor_id": "B108-F1"
+    },
+    {
+      "id": "B108-F2",
+      "kind": "floor",
+      "building": "B108",
+      "floor_id": "B108-F2"
+    },
+    {
+      "id": "B116-F1",
+      "kind": "floor",
+      "building": "B116",
+      "floor_id": "B116-F1"
+    },
+    {
+      "id": "B122-F1-U01",
+      "kind": "unit",
+      "building": "B122",
+      "floor_id": "B122-F1"
+    },
+    {
+      "id": "B122-F1-U02",
+      "kind": "unit",
+      "building": "B122",
+      "floor_id": "B122-F1"
+    },
+    {
+      "id": "B122-F1-U03",
+      "kind": "unit",
+      "building": "B122",
+      "floor_id": "B122-F1"
+    },
+    {
+      "id": "B122-F1-U04",
+      "kind": "unit",
+      "building": "B122",
+      "floor_id": "B122-F1"
+    },
+    {
+      "id": "B122-F2",
+      "kind": "floor",
+      "building": "B122",
+      "floor_id": "B122-F2"
+    },
+    {
+      "id": "B122-F3-U01",
+      "kind": "unit",
+      "building": "B122",
+      "floor_id": "B122-F3"
+    },
+    {
+      "id": "B122-F3-U02",
+      "kind": "unit",
+      "building": "B122",
+      "floor_id": "B122-F3"
+    }
+  ]
+}

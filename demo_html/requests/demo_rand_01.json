@@ -1,0 +1,18 @@
+{
+  "request_id": "demo_rand_01",
+  "description": "[랜덤 1] 모델·정답과 무관한 무작위 요청 — 발화 B18-F1-U03 · 풍속 10 m/s · 풍향 225 · 습도 60 %",
+  "ignition_nodes": [
+    "B18-F1-U03"
+  ],
+  "burning_nodes": [],
+  "weather": {
+    "wind_speed_ms": 10.0,
+    "wind_dir_deg": 225,
+    "rh_pct": 60.0
+  },
+  "pick": {
+    "group": "랜덤",
+    "rank": 1,
+    "seed": 42
+  }
+}

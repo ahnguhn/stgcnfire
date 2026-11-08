@@ -1,0 +1,24 @@
+{
+  "request_id": "demo_low_04",
+  "description": "[하위 4] test 샘플 12408 · t0 0분 · 기상 L16 · 칸 F1 0.000 · 60분 내 새 착화 정답 0 / 예측 1",
+  "ignition_nodes": [
+    "B24-F1"
+  ],
+  "burning_nodes": [],
+  "weather": {
+    "wind_speed_ms": 2.0,
+    "wind_dir_deg": 0.0,
+    "rh_pct": 60.0
+  },
+  "pick": {
+    "group": "하위",
+    "rank": 4,
+    "split": "test",
+    "sample_id": 12408,
+    "t0_s": 0,
+    "weather_code": "L16",
+    "f1": 0.0,
+    "n_label_new_60min": 0,
+    "n_pred_new_60min": 1
+  }
+}

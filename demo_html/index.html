@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>화재 확산 추론 데모</title>
+<!--
+  전통시장 화재 확산 추론 데모 — 단일 파일 (외부 라이브러리 없음, 더블클릭으로 열림)
+
+  폴더 구조
+    demo_html/
+    ├ index.html                     ← 이 파일
+    ├ building/space_data.json(.js)  공간정보      code\demo_data_builder> python make_demo_html.py --space-only
+    ├ requests/<id>.json  + _bundle.js  추론 입력  code\inference> python make_request.py …
+    └ results/<id>_result.json + _bundle.js  추론 출력  code\inference> python infer.py … / make_request.py … --run
+
+  열면 building · requests · results 의 데이터를 자동으로 읽는다. [⟳ 다시 불러오기] 를 누르면 다시 읽는다.
+  (브라우저는 file:// 에서 폴더 목록을 못 읽으므로 각 폴더의 .js 묶음을 읽는다. 묶음은 위 프로그램들이 파일을 쓸 때 자동 갱신,
+   JSON 을 손으로 넣거나 지웠으면 code\inference> python demo_bundle.py)
+-->
+<style>
+:root{--navy:#1F2660;--ink:#1a1a1a;--mute:#6b6b6b;--line:#d9dce5;--bg:#f4f5f8;--card:#fff;--red:#D7261E}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink);background:var(--bg);font-size:13px}
+header{background:var(--navy);color:#fff;padding:8px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header h1{font-size:16px;margin:0;font-weight:700}
+header .sub{font-size:11.5px;opacity:.8}
+.toolbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:auto}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:6px;padding:5px 10px}
+button:hover{background:#eef1f8}
+header button{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff}
+header button:hover{background:rgba(255,255,255,.2)}
+header button.primary{background:#fff;color:var(--navy);font-weight:700}
+.chip{display:inline-block;background:rgba(255,255,255,.15);border-radius:12px;padding:2px 9px;font-size:11.5px}
+.chip b{color:#ffd58a}
+main{display:grid;grid-template-columns:250px 1fr 400px;gap:10px;padding:10px;height:calc(100% - 48px);min-height:600px}
+.col{display:flex;flex-direction:column;gap:10px;min-height:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:0}
+.card h3{margin:0 0 8px;font-size:12.5px;color:var(--navy)}
+.card.grow{flex:1;display:flex;flex-direction:column}
+#scenList{flex:1;overflow:auto;border:1px solid var(--line);border-radius:6px}
+.scen{padding:7px 9px;border-bottom:1px solid #eef0f5;cursor:pointer;display:flex;justify-content:space-between;gap:6px}
+.scen:hover{background:#f3f5fa}.scen.sel{background:#e6ebf7;box-shadow:inset 3px 0 0 var(--navy)}
+.scen .id{font-weight:700;word-break:break-all}.scen .st{font-size:11px;color:var(--mute)}
+.scen.nores .id{color:var(--mute)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px}
+.kv div:nth-child(odd){color:var(--mute);white-space:nowrap}
+#mapCard{flex:1;display:flex;flex-direction:column}
+#mapWrap{flex:1;position:relative;overflow:hidden;background:#fafbfd;border:1px solid var(--line);border-radius:6px;min-height:380px}
+#map,#map3d{position:absolute;inset:0;width:100%;height:100%;display:block}
+#map{cursor:grab}#map3d{cursor:grab}
+.mapbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.grp{display:inline-flex;gap:3px;align-items:center}
+.grp button{padding:3px 8px;font-size:12px}.grp button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.grp .lbl{font-size:11px;color:var(--mute);margin-right:2px}
+#legend{position:absolute;left:10px;bottom:10px;background:rgba(255,255,255,.93);border:1px solid var(--line);border-radius:6px;padding:6px 9px;font-size:11px;line-height:1.5;pointer-events:none}
+#hint3d{position:absolute;right:10px;top:8px;font-size:11px;color:var(--mute);background:rgba(255,255,255,.85);padding:2px 6px;border-radius:4px;pointer-events:none}
+.sw{display:inline-block;width:12px;height:12px;vertical-align:-2px;margin-right:4px;border:1px solid rgba(0,0,0,.2)}
+#tip{position:absolute;pointer-events:none;background:#fff;border:1px solid var(--line);border-radius:6px;padding:6px 9px;font-size:11.5px;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;max-width:270px;z-index:5}
+.timebar{display:flex;align-items:center;gap:10px;margin-top:8px}
+.timebar input[type=range]{flex:1}
+#tLabel{font-weight:700;min-width:70px;color:var(--navy)}
+.stat{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.stat div{background:var(--bg);border-radius:6px;padding:6px;text-align:center}
+.stat b{display:block;font-size:18px;color:var(--navy)}
+.stat span{font-size:11px;color:var(--mute)}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{background:var(--bg);text-align:left;padding:4px 6px;color:var(--mute);font-weight:600;position:sticky;top:0;white-space:nowrap}
+td{padding:4px 6px;border-bottom:1px solid #eef0f5;white-space:nowrap}
+td.wrap{white-space:normal}
+tr.rowc{cursor:pointer}tr.rowc:hover td{background:#f3f5fa}
+.tbl{overflow:auto;max-height:170px;border:1px solid var(--line);border-radius:6px}
+#chart{width:100%;flex:1;min-height:150px;display:block}
+.muted{color:var(--mute);font-size:11.5px}
+.empty{color:var(--mute);padding:16px;text-align:center}
+.tabs{display:flex;gap:4px;margin-bottom:6px}.tabs button{padding:3px 9px;font-size:12px}.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+#log{font-size:11px;color:var(--mute);max-height:120px;overflow:auto;white-space:pre-wrap}
+.warn{color:var(--red)}
+#drop{position:fixed;inset:0;background:rgba(31,38,96,.25);display:none;align-items:center;justify-content:center;font-size:20px;color:#fff;z-index:9}
+#drop.on{display:flex}
+@media (max-width:1200px){main{grid-template-columns:230px 1fr;grid-template-rows:auto auto;height:auto}#right{grid-column:1/3}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>전통시장 화재 확산 추론 데모</h1><div class="sub">building · requests · results 폴더의 데이터를 읽어 시나리오별 확산 예측을 3D 로 표시</div></div>
+  <div class="toolbar">
+    <span class="chip">건물 <b id="cB">0</b></span><span class="chip">요청 <b id="cR">0</b></span><span class="chip">결과 <b id="cS">0</b></span>
+    <button class="primary" id="btnReload" title="building · requests · results 폴더를 다시 읽음">⟳ 다시 불러오기</button>
+    <button id="btnPick" title="자동 로딩이 안 될 때: demo_html 폴더를 직접 선택">폴더 직접 선택</button>
+  </div>
+  <input type="file" id="fAll" webkitdirectory multiple hidden>
+</header>
+<div id="drop">파일을 놓으면 불러옵니다</div>
+
+<main>
+  <!-- 왼쪽: 시나리오 목록 -->
+  <div class="col">
+    <div class="card grow">
+      <h3>시나리오 (requests ↔ results)</h3>
+      <div id="scenList"><div class="empty">불러오는 중…</div></div>
+    </div>
+    <div class="card"><h3>불러오기 기록</h3><div id="log"></div></div>
+  </div>
+
+  <!-- 가운데: 지도 -->
+  <div class="col">
+    <div class="card" id="mapCard">
+      <div class="mapbar">
+        <span class="grp" id="viewBtns"><button class="on" data-v="3d">3D</button><button data-v="2d">2D</button></span>
+        <span class="grp"><span class="lbl" id="floorLbl">표시 층</span><span id="floorBtns" class="grp"></span></span>
+        <span class="grp" id="modeBtns" style="margin-left:auto"><button class="on" data-m="time">시간별 확산</button><button data-m="eta">도달시각</button><button data-m="prob">60분 확률</button></span>
+        <button id="btnFit" title="시점 초기화">⌂</button>
+      </div>
+      <div id="mapWrap">
+        <canvas id="map3d"></canvas>
+        <svg id="map" xmlns="http://www.w3.org/2000/svg" style="display:none"></svg>
+        <div id="legend"></div>
+        <div id="hint3d">드래그 회전 · Shift/우클릭 드래그 이동 · 휠 확대 · 클릭 곡선 추가</div>
+        <div id="tip"></div>
+      </div>
+      <div class="timebar">
+        <button id="btnPlay">▶ 재생</button>
+        <button id="tPrev" title="5분 앞으로">−5분</button>
+        <input type="range" id="tRange" min="5" max="60" value="5" step="5">
+        <button id="tNext" title="5분 뒤로">+5분</button>
+        <span id="tLabel">5분 후</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 오른쪽: 요청 · 요약 · 곡선 -->
+  <div class="col" id="right">
+    <div class="card">
+      <h3>요청 내용 <span class="muted" id="reqName"></span></h3>
+      <div class="kv" id="reqInfo"><div class="muted" style="grid-column:1/3">시나리오를 선택하세요</div></div>
+    </div>
+    <div class="card">
+      <h3>확산 요약 (60분 · 확률 ≥ 임계값)</h3>
+      <div class="stat">
+        <div><b id="sN">–</b><span>확산 구획</span></div><div><b id="sU">–</b><span>호실</span></div>
+        <div><b id="sF">–</b><span>층</span></div><div><b id="sB">–</b><span>타 건물</span></div>
+      </div>
+      <div class="tabs"><button class="on" data-t="nodes">구획</button><button data-t="floors">층</button><button data-t="bldgs">건물</button></div>
+      <div class="tbl" id="tblWrap"><div class="empty">—</div></div>
+    </div>
+    <div class="card grow">
+      <h3>착화 확률 곡선 <span class="muted" id="chartNote"></span></h3>
+      <svg id="chart"></svg>
+    </div>
+  </div>
+</main>
+
+<script>
+/* ============================================================ 상태 */
+const S = { space: null, reqs: {}, ress: {}, sel: null, view: "3d", floor: 0, step: 0, mode: "time", tab: "nodes", pick: [], v2: null, v3: { theta: -0.55, tilt: 0.95, zoom: 1, px: 0, py: 0 }, playing: null, min: 5 };
+const $ = id => document.getElementById(id);
+const fmt = v => v == null ? "–" : Number(v).toLocaleString();
+const natural = (a, b) => a.localeCompare(b, undefined, { numeric: true });
+/* 시나리오 목록 순서: 상위 → 중위 → 랜덤 → 하위 → 그 밖 (요청 pick.group, 없으면 이름의 _top_ · _mid_ · _rand_ · _low_), 같은 묶음 안은 이름 순 */
+const GROUP_ORDER = { "상위": 0, "top": 0, "중위": 1, "mid": 1, "랜덤": 2, "rand": 2, "하위": 3, "low": 3 };
+function scenGroup(id) {
+  const q = (S.reqs && S.reqs[id]) || (S.ress && S.ress[id] && S.ress[id].input) || {};
+  const g = q.pick && q.pick.group;
+  if (g != null && g in GROUP_ORDER) return GROUP_ORDER[g];
+  const m = /_(top|mid|rand|low)_\d+$/.exec(id);
+  return m ? GROUP_ORDER[m[1]] : 4;
+}
+const scenOrder = (a, b) => scenGroup(a) - scenGroup(b) || natural(a, b);
+const log = (m, warn) => { const el = $("log"); const t = new Date().toTimeString().slice(0, 8); el.innerHTML = `<div${warn ? ' class="warn"' : ""}>${t} ${m}</div>` + el.innerHTML; };
+
+/* ============================================================ 자동 불러오기 (하위 폴더의 .js 묶음) */
+const SOURCES = [["building", "building/space_data.js", "__DH_BUILDING"], ["requests", "requests/_bundle.js", "__DH_REQUESTS"], ["results", "results/_bundle.js", "__DH_RESULTS"]];
+function loadScript(src) {
+  return new Promise(res => { const s = document.createElement("script"); s.src = src + "?t=" + Date.now(); s.onload = () => { s.remove(); res(true); }; s.onerror = () => { s.remove(); res(false); }; document.head.appendChild(s); });
+}
+async function reloadAll() {
+  const keepSel = S.sel; S.reqs = {}; S.ress = {}; S.space = null;
+  const msg = [];
+  for (const [name, src, v] of SOURCES) {
+    window[v] = undefined;
+    const ok = await loadScript(src);
+    const val = window[v];
+    if (!ok || val == null) { msg.push(`${name} 없음`); continue; }
+    if (name === "building") { S.space = val; msg.push(`building 건물 ${val.n_building}`); }
+    else { let n = 0; for (const [fn, obj] of Object.entries(val)) { put(obj, fn); n++; } msg.push(`${name} ${n}`); }
+  }
+  const missing = msg.filter(m => m.endsWith("없음"));
+  log("불러옴: " + msg.join(" · "), missing.length === 3);
+  if (missing.length === 3) log("하위 폴더의 .js 묶음을 찾지 못함 — code\\inference> python demo_bundle.py 실행 또는 [폴더 직접 선택]", true);
+  S.sel = keepSel && S.ress[keepSel] ? keepSel : null;
+  if (!S.sel) S.pick = [];
+  afterLoad();
+}
+function classify(o) { if (o && o.buildings && o.units) return "building"; if (o && o.probs && o.summary) return "result"; if (o && o.ignition_nodes) return "request"; return null; }
+function put(obj, fname) {
+  const k = classify(obj);
+  if (k === "building") S.space = obj;
+  else if (k === "result") { const id = obj.request_id || (obj.input && obj.input.request_id) || fname.replace(/_result\.json$/i, "").replace(/\.json$/i, ""); S.ress[id] = obj; if (obj.input && !S.reqs[id]) S.reqs[id] = obj.input; }
+  else if (k === "request") { const id = obj.request_id || fname.replace(/\.json$/i, ""); S.reqs[id] = obj; }
+  return k;
+}
+async function ingestFiles(files, hint) {
+  let n = { building: 0, request: 0, result: 0 };
+  for (const f of files) { if (!/\.json$/i.test(f.name)) continue; try { const k = put(JSON.parse(await f.text()), f.name); if (k) n[k]++; } catch (e) { } }
+  log(`${hint}: 건물 ${n.building} · 요청 ${n.request} · 결과 ${n.result}`); afterLoad();
+}
+$("btnReload").onclick = reloadAll;
+$("btnPick").onclick = () => $("fAll").click();
+$("fAll").onchange = e => { S.reqs = {}; S.ress = {}; ingestFiles([...e.target.files], "폴더 직접 선택"); e.target.value = ""; };
+document.addEventListener("dragover", e => { e.preventDefault(); $("drop").classList.add("on"); });
+document.addEventListener("dragleave", e => { if (!e.relatedTarget) $("drop").classList.remove("on"); });
+document.addEventListener("drop", e => { e.preventDefault(); $("drop").classList.remove("on"); ingestFiles([...e.dataTransfer.files], "끌어다 놓기"); });
+
+function afterLoad() {
+  $("cB").textContent = S.space ? S.space.n_building : 0;
+  $("cR").textContent = Object.keys(S.reqs).length; $("cS").textContent = Object.keys(S.ress).length;
+  if (S.space) buildPrisms();
+  buildFloorButtons(); renderScenList();
+  if (!S.sel) { const first = Object.keys(S.ress).sort(scenOrder)[0]; if (first) { selectScen(first); return; } }
+  else { selectScen(S.sel, true); return; }
+  renderReq(); renderSummary(); render(); drawChart();
+}
+
+/* ============================================================ 시나리오 목록 · 요청 내용 */
+function renderScenList() {
+  const ids = [...new Set([...Object.keys(S.ress), ...Object.keys(S.reqs)])].sort(scenOrder);
+  const el = $("scenList"); el.innerHTML = "";
+  if (!ids.length) { el.innerHTML = '<div class="empty">requests · results 에 데이터가 없습니다</div>'; return; }
+  ids.forEach((id, i) => {
+    const r = S.ress[id], q = S.reqs[id] || (r && r.input) || {};
+    const d = document.createElement("div"); d.className = "scen" + (r ? "" : " nores") + (id === S.sel ? " sel" : ""); d.dataset.id = id;
+    d.innerHTML = `<div><div class="id">${i + 1}. ${id}</div><div class="st">${(q.ignition_nodes || []).join(", ")}</div></div><div class="st">${r ? `${fmt(r.summary.n_spread_nodes)}구획` : "결과 없음"}</div>`;
+    d.onclick = () => { if (r) selectScen(id); else { S.sel = null; renderScenList(); renderReq(id); log(`${id}: results 에 결과가 없음 — infer.py 실행 필요`, true); } };
+    el.appendChild(d);
+  });
+}
+const dirName = d => ["북", "북동", "동", "남동", "남", "남서", "서", "북서"][Math.round(((d % 360) + 360) % 360 / 45) % 8];
+function renderReq(onlyReqId) {
+  const id = onlyReqId || S.sel; const r = id && S.ress[id]; const q = (id && S.reqs[id]) || (r && r.input);
+  $("reqName").textContent = id ? `— ${id}` : "";
+  if (!q) { $("reqInfo").innerHTML = '<div class="muted" style="grid-column:1/3">시나리오를 선택하세요</div>'; return; }
+  const sm = r ? r.summary : {}, w = q.weather || {}, wu = sm.weather_used || {};
+  const chg = (a, b, u) => (b != null && a != null && Number(b) !== Number(a)) ? ` <span class="muted">→ 적용 ${b}${u}</span>` : "";
+  const ign = (q.ignition_nodes || []).join(", "), res = (sm.ignition_resolved || []).join(", ");
+  const unitTxt = n => { const u = S.space && S.space.units[n]; return u && u.name && u.name !== "nan" ? ` (${u.name})` : ""; };
+  const rows = [
+    ["발화 구획", ign + (res && res !== ign ? ` <span class="muted">→ ${res}</span>` : "") + unitTxt((sm.ignition_resolved || q.ignition_nodes || [])[0])],
+    ["이미 연소", (q.burning_nodes || []).length ? q.burning_nodes.join(", ") : "없음"],
+    ["풍속", `${w.wind_speed_ms ?? "–"} m/s` + chg(w.wind_speed_ms, wu.wind_speed_ms, "")],
+    ["풍향", w.wind_dir_deg == null ? "무풍" : `${w.wind_dir_deg}° (${dirName(w.wind_dir_deg)}풍, 바람이 불어오는 방향)` + chg(w.wind_dir_deg, wu.wind_dir_deg, "°")],
+    ["습도", `${w.rh_pct ?? "–"} %` + chg(w.rh_pct, wu.rh_pct, " %")],
+  ];
+  if (q.description) rows.push(["설명", q.description]);
+  if (r) rows.push(["모델", `노드 ${fmt(r.model && r.model.n_nodes)} · ${r.model ? r.model.step_minutes : 5}분 × ${r.model ? r.model.horizon_steps : 12}스텝 · 임계 ${r.model ? r.model.threshold : 0.5}`], ["생성", r.generated_at || "–"]);
+  else rows.push(["결과", '<span class="warn">results 에 없음</span>']);
+  $("reqInfo").innerHTML = rows.map(([k, v]) => `<div>${k}</div><div>${v}</div>`).join("") + (r && r.model && r.model.warning ? `<div style="grid-column:1/3" class="warn">⚠ ${r.model.warning}</div>` : "");
+}
+function selectScen(id, keep) {
+  const r = S.ress[id]; if (!r) return;
+  if (keep && S.sel === id) { renderScenList(); renderReq(); buildFloorButtons(); renderSummary(); render(); drawChart(); return; }   // 다시 불러오기: 시점·선택 유지
+  S.sel = id; S.pick = [];
+  renderScenList(); renderReq();
+  const o = (r.summary.ignition_resolved || [])[0]; const f = o && floorOfNode(o);
+  if (S.view === "2d" && f != null) S.floor = f;
+  $("tRange").max = maxMin(); setMinute(5, true);
+  buildFloorButtons(); renderSummary(); render(); drawChart();
+}
+
+/* ============================================================ 공간 · 노드 대응 */
+const floorId = (b, f) => f > 0 ? `${b}-F${f}` : `${b}-B${-f}`;
+function floorOfNode(id) { const m = id.match(/^B\d+-(F|B)(\d+)/); return m ? (m[1] === "F" ? +m[2] : -m[2]) : null; }
+const CORR_NAMES = new Set(["통로", "복도"]);   // 통로 폴리곤(노드 아님) — space_data 의 cor=1 또는 이름으로
+function isCor(u) { return u.cor === 1 || CORR_NAMES.has(String(u.name || "").trim()); }
+function nodeOfUnit(uid, u, r) { return (r.probs && uid in r.probs) || nodeSet(r).has(uid) ? uid : floorId(u.b, u.f); }
+function nodeSet(r) { if (!r._ns) r._ns = new Set((r.nodes || []).map(n => n.id)); return r._ns; }
+const probsOf = (r, n) => (r && r.probs && r.probs[n]) || null;
+const firstStep = (p, thr) => { if (!p) return null; const k = p.findIndex(v => v >= thr); return k < 0 ? null : k; };
+const curRes = () => S.sel && S.ress[S.sel];
+const thrOf = r => r && r.model ? r.model.threshold : 0.5;
+
+/* ============================================================ 색 */
+const colTime = p => p >= 0.9 ? "#B0170F" : p >= 0.7 ? "#D7261E" : p >= 0.5 ? "#F05A28" : p >= 0.3 ? "#F59A23" : p >= 0.15 ? "#F8C87A" : p >= 0.05 ? "#FCE6C0" : null;
+const colEta = k => ["#8B0000", "#B0170F", "#D7261E", "#E8431E", "#F05A28", "#F47A2A", "#F59A23", "#F7B04A", "#F9C46E", "#FBD48F", "#FCE2B0", "#FDEFD2"][Math.min(k, 11)];
+const C_IGN = "#5E0B08", C_BURN = "#8E1A14", C_NONE = "#E3E6EC";
+function cellColor(node, r) {
+  if (!r) return null;
+  if ((r.summary.ignition_resolved || []).includes(node)) return C_IGN;
+  if ((r.summary.burning_nodes_resolved || []).includes(node)) return C_BURN;
+  const p = probsOf(r, node);
+  if (S.mode === "time") return colTime(p ? p[S.step] : 0);
+  if (S.mode === "eta") { const k = firstStep(p, thrOf(r)); return k == null ? null : colEta(k); }
+  return colTime(p ? p[p.length - 1] : 0);
+}
+function legendHTML(r) {
+  if (!r) return "시나리오를 선택하면 확산을 표시";
+  const base = `<br><span class="sw" style="background:${C_IGN}"></span>발화 <span class="sw" style="background:${C_BURN}"></span>이미 연소 <span class="sw" style="background:${C_NONE}"></span>해당 없음`;
+  if (S.mode === "eta") return `<b>도달시각</b> (확률 ≥ ${thrOf(r)} 처음 넘는 시점)<br>` + [0, 2, 5, 8, 11].map(k => `<span class="sw" style="background:${colEta(k)}"></span>${(k + 1) * 5}분`).join(" ") + base;
+  return `<b>${S.mode === "time" ? S.min + "분 시점" : maxMin() + "분"} 착화 확률</b><br>` + [0.05, 0.3, 0.5, 0.7, 0.9].map(v => `<span class="sw" style="background:${colTime(v)}"></span>≥${v}`).join(" ") + base;
+}
+
+/* ============================================================ 층 · 보기 버튼 */
+function floorsAll() { return S.space ? [...new Set(Object.values(S.space.units).map(u => u.f))].sort((a, b) => a - b) : []; }
+function buildFloorButtons() {
+  const el = $("floorBtns"); el.innerHTML = "";
+  const fs = floorsAll(); if (!fs.length) return;
+  if (S.view === "3d") {
+    $("floorLbl").textContent = "보이는 층";
+    if (S.floor !== 0 && !fs.includes(S.floor)) S.floor = 0;
+    [["전체", 0]].concat(fs.filter(f => f > 0).map(f => [`~${f}층`, f])).forEach(([t, f]) => { const b = document.createElement("button"); b.textContent = t; b.className = f === S.floor ? "on" : ""; b.title = f ? `${f}층까지 보기 (위층 숨김)` : "모든 층"; b.onclick = () => { S.floor = f; buildFloorButtons(); render(); }; el.appendChild(b); });
+  } else {
+    $("floorLbl").textContent = "층";
+    if (!fs.includes(S.floor)) S.floor = 1;
+    fs.forEach(f => { const b = document.createElement("button"); b.textContent = f > 0 ? `${f}층` : `지하${-f}`; b.className = f === S.floor ? "on" : ""; b.onclick = () => { S.floor = f; buildFloorButtons(); render(); }; el.appendChild(b); });
+  }
+}
+document.querySelectorAll("#viewBtns button").forEach(b => b.onclick = () => {
+  S.view = b.dataset.v; document.querySelectorAll("#viewBtns button").forEach(x => x.classList.toggle("on", x === b));
+  $("map3d").style.display = S.view === "3d" ? "" : "none"; $("map").style.display = S.view === "2d" ? "" : "none"; $("hint3d").style.display = S.view === "3d" ? "" : "none";
+  const r = curRes(); const o = r && (r.summary.ignition_resolved || [])[0];
+  S.floor = S.view === "3d" ? 0 : (o ? floorOfNode(o) : 1);
+  buildFloorButtons(); render();
+});
+document.querySelectorAll("#modeBtns button").forEach(b => b.onclick = () => { S.mode = b.dataset.m; document.querySelectorAll("#modeBtns button").forEach(x => x.classList.toggle("on", x === b)); render(); });
+$("btnFit").onclick = () => { Object.assign(S.v3, { theta: -0.55, tilt: 0.95, zoom: 1, px: 0, py: 0 }); S.v2 = null; render(); };
+function render() { $("legend").innerHTML = legendHTML(curRes()); if (S.view === "3d") draw3d(); else draw2d(); }
+
+/* ============================================================ 3D (캔버스, 외부 라이브러리 없음) */
+let PR = [];   // 호실 기둥: {uid, u, poly:[[x,y]], z0, z1, cx, cy}
+function buildPrisms() {
+  const M = S.space; PR = [];
+  for (const [uid, u] of Object.entries(M.units)) {
+    const z = (M.floors && M.floors[floorId(u.b, u.f)]) || (u.f > 0 ? [(u.f - 1) * 3.5, u.f * 3.5] : [u.f * 3.5, (u.f + 1) * 3.5]);
+    for (const ring of u.poly) { const poly = ring.map(([x, y]) => [x, M.H - y]); PR.push({ uid, u, poly, z0: z[0], z1: z[1], cx: poly.reduce((a, p) => a + p[0], 0) / poly.length, cy: poly.reduce((a, p) => a + p[1], 0) / poly.length }); }
+  }
+}
+const cv = $("map3d"), ctx = cv.getContext("2d"); let topFaces = [];
+function P3() { const w = cv.clientWidth, h = cv.clientHeight, M = S.space, v = S.v3; return { c: Math.cos(v.theta), s: Math.sin(v.theta), k: Math.min(w / (M.W * 1.1), h / (M.H * 1.1)) * v.zoom, cx: w / 2 + v.px, cy: h / 2 + v.py, w, h }; }
+function proj(x, y, z, P) { const M = S.space, v = S.v3; const xr = (x - M.W / 2) * P.c - (y - M.H / 2) * P.s, yr = (x - M.W / 2) * P.s + (y - M.H / 2) * P.c; return [P.cx + xr * P.k, P.cy - (yr * Math.cos(v.tilt) + z * Math.sin(v.tilt)) * P.k, yr]; }
+function rgb(hex) { const n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+const shade = (hex, k) => `rgb(${rgb(hex).map(v => Math.round(v * k)).join(",")})`;
+function draw3d() {
+  const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+  const M = S.space; if (!M) { ctx.fillStyle = "#6b6b6b"; ctx.font = "14px sans-serif"; ctx.fillText("building/space_data.js 를 찾지 못했습니다", 20, 30); return; }
+  const P = P3(), r = curRes(), v = S.v3;
+  // 바닥 (건물 외곽)
+  ctx.lineWidth = 0.6; ctx.strokeStyle = "#C3C7D2"; ctx.fillStyle = "#EDEFF3";
+  for (const b of M.buildings) for (const ring of b.poly) { ctx.beginPath(); ring.forEach(([x, y], i) => { const q = proj(x, M.H - y, 0, P); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  // 기둥: 보이는 층만, 뒤 → 앞 (화가 알고리즘)
+  const maxF = S.floor || 99;
+  const items = PR.filter(p => p.u.f <= maxF).map(pr => { const q = proj(pr.cx, pr.cy, 0, P); return { pr, d: q[2] * Math.cos(v.tilt) - pr.z0 * Math.sin(v.tilt) * 0.3 }; });
+  items.sort((a, b) => b.d - a.d || a.pr.z0 - b.pr.z0);
+  topFaces = []; const labels = [];
+  const ign = new Set(r ? r.summary.ignition_resolved || [] : []), sel = new Set(S.pick);
+  for (const { pr } of items) {
+    const node = r ? nodeOfUnit(pr.uid, pr.u, r) : null;
+    const col = r ? cellColor(node, r) : null; const base = col || (r ? C_NONE : (pr.u.f > 0 ? "#DCE1EA" : "#C9CED9"));
+    const top = pr.poly.map(([x, y]) => proj(x, y, pr.z1, P)), bot = pr.poly.map(([x, y]) => proj(x, y, pr.z0, P));
+    if (isCor(pr.u)) {   // 통로 폴리곤: 투명 — 바닥 윤곽(점선)과 옅은 면만
+      ctx.save(); ctx.globalAlpha = 0.10; ctx.fillStyle = "#9AA0AE"; ctx.beginPath(); bot.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 0.85; ctx.setLineDash([4, 3]); ctx.strokeStyle = "#7A8090"; ctx.lineWidth = 0.8; ctx.stroke(); ctx.restore(); continue;
+    }
+    const n = pr.poly.length - 1, sides = [];
+    for (let i = 0; i < n; i++) { const j = i + 1; sides.push({ i, j, d: (top[i][2] + top[j][2]) / 2, dx: pr.poly[j][0] - pr.poly[i][0], dy: pr.poly[j][1] - pr.poly[i][1] }); }
+    sides.sort((a, b) => b.d - a.d);
+    for (const sd of sides) { const lit = 0.7 + 0.22 * Math.abs(Math.sin(Math.atan2(sd.dy, sd.dx) + v.theta)); ctx.fillStyle = shade(base, lit); ctx.beginPath(); ctx.moveTo(bot[sd.i][0], bot[sd.i][1]); ctx.lineTo(bot[sd.j][0], bot[sd.j][1]); ctx.lineTo(top[sd.j][0], top[sd.j][1]); ctx.lineTo(top[sd.i][0], top[sd.i][1]); ctx.closePath(); ctx.fill(); ctx.strokeStyle = shade(base, 0.62); ctx.lineWidth = 0.35; ctx.stroke(); }
+    ctx.fillStyle = base; ctx.beginPath(); top.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.fill();
+    const isIgn = node && ign.has(node), isSel = node && sel.has(node);
+    ctx.strokeStyle = isSel ? "#2F55A4" : (isIgn ? "#fff" : shade(base, 0.7)); ctx.lineWidth = isSel ? 2 : (isIgn ? 1.4 : 0.45); ctx.stroke();
+    topFaces.push({ pr, node, pts: top.map(q => [q[0], q[1]]) });
+    if (isIgn && !labels.some(l => l.node === node)) labels.push({ node, x: top.reduce((a, q) => a + q[0], 0) / top.length, y: Math.min(...top.map(q => q[1])) - 8 });
+  }
+  // 아케이드 지붕 (반투명)
+  const ah = M.arcade_h || 7;
+  for (const ring of (M.arcade || [])) {
+    const top = ring.map(([x, y]) => proj(x, M.H - y, ah, P)), bot = ring.map(([x, y]) => proj(x, M.H - y, 0, P));
+    ctx.strokeStyle = "#2F55A4"; ctx.globalAlpha = 0.45; ctx.lineWidth = 0.6;
+    for (let i = 0; i < top.length; i += Math.max(1, Math.floor(top.length / 24))) { ctx.beginPath(); ctx.moveTo(bot[i][0], bot[i][1]); ctx.lineTo(top[i][0], top[i][1]); ctx.stroke(); }
+    ctx.globalAlpha = 0.12; ctx.fillStyle = "#2F55A4"; ctx.beginPath(); top.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.closePath(); ctx.fill();
+    ctx.globalAlpha = 0.7; ctx.lineWidth = 1; ctx.setLineDash([5, 3]); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+  }
+  ctx.font = "700 12px 'Malgun Gothic',sans-serif"; ctx.textAlign = "center"; ctx.lineWidth = 3; ctx.strokeStyle = "#fff"; ctx.fillStyle = "#5E0B08";
+  for (const l of labels) { const t = "★ 발화 " + l.node; ctx.strokeText(t, l.x, l.y); ctx.fillText(t, l.x, l.y); }
+  ctx.textAlign = "left"; ctx.font = "11px sans-serif"; ctx.fillStyle = "#8a8a8a";
+  ctx.fillText(`회전 ${Math.round(v.theta * 180 / Math.PI)}° · 기울기 ${Math.round(v.tilt * 180 / Math.PI)}°${S.floor ? ` · ${S.floor}층까지` : " · 전체 층"} · 아케이드 지붕 ${ah} m (파란 점선)`, 10, 18);
+  drawCompass(ctx, w - 50, h - 50, v.theta, v.tilt);
+}
+// 나침반 (3D) — 지도 좌표(x 동 · y 북)를 현재 회전(theta)·기울기(tilt)로 투영한 방위. 빨간 바늘 = 북(N)
+function drawCompass(ctx, x, y, theta, tilt){
+  const c = Math.cos(theta), s = Math.sin(theta), ct = Math.cos(tilt), R = 24;
+  const dir = (e, n) => [(e*c - n*s)*R, -(e*s + n*c)*ct*R];
+  ctx.save();
+  ctx.beginPath(); ctx.arc(x, y, R + 15, 0, 2*Math.PI); ctx.fillStyle = 'rgba(255,255,255,0.88)'; ctx.fill(); ctx.strokeStyle = '#C3C7D2'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.beginPath(); for (let i = 0; i <= 48; i++) { const a = i/48*2*Math.PI, d = dir(Math.cos(a), Math.sin(a)); i ? ctx.lineTo(x+d[0], y+d[1]) : ctx.moveTo(x+d[0], y+d[1]); }
+  ctx.strokeStyle = '#A3A9B6'; ctx.lineWidth = 1; ctx.stroke();
+  const n = dir(0, 1), e = dir(1, 0), w = [e[0]*0.2, e[1]*0.2];
+  if (Math.hypot(w[0], w[1]) < 2.5) { const L = Math.hypot(n[0], n[1]) || 1; w[0] = -n[1]/L*4; w[1] = n[0]/L*4; }
+  ctx.beginPath(); ctx.moveTo(x+n[0], y+n[1]); ctx.lineTo(x+w[0], y+w[1]); ctx.lineTo(x-w[0], y-w[1]); ctx.closePath(); ctx.fillStyle = '#D0342C'; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(x-n[0], y-n[1]); ctx.lineTo(x+w[0], y+w[1]); ctx.lineTo(x-w[0], y-w[1]); ctx.closePath(); ctx.fillStyle = '#8A90A0'; ctx.fill();
+  ctx.beginPath(); ctx.arc(x, y, 2, 0, 2*Math.PI); ctx.fillStyle = '#fff'; ctx.fill();
+  ctx.font = '700 11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  for (const [t, ee, nn, col] of [['N',0,1,'#D0342C'], ['E',1,0,'#4A4F5C'], ['S',0,-1,'#4A4F5C'], ['W',-1,0,'#4A4F5C']]) { const d = dir(ee*1.38, nn*1.38); ctx.fillStyle = col; ctx.fillText(t, x+d[0], y+d[1]); }
+  ctx.restore();
+}
+function hit3d(x, y) {
+  for (let i = topFaces.length - 1; i >= 0; i--) { const f = topFaces[i], pts = f.pts; let inside = false; for (let a = 0, b = pts.length - 1; a < pts.length; b = a++) { const [xi, yi] = pts[a], [xj, yj] = pts[b]; if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / ((yj - yi) || 1e-9) + xi)) inside = !inside; } if (inside) return f; }
+  return null;
+}
+let d3 = null;
+cv.addEventListener("pointerdown", e => { d3 = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, pan: e.shiftKey || e.button === 2 || e.button === 1 }; cv.setPointerCapture(e.pointerId); });
+cv.addEventListener("pointermove", e => {
+  if (d3) { const dx = e.clientX - d3.x, dy = e.clientY - d3.y; d3.x = e.clientX; d3.y = e.clientY; if (d3.pan) { S.v3.px += dx; S.v3.py += dy; } else { S.v3.theta += dx * 0.008; S.v3.tilt = Math.max(0.15, Math.min(1.5, S.v3.tilt - dy * 0.006)); } hideTip(); draw3d(); return; }
+  const rc = cv.getBoundingClientRect(); const f = hit3d(e.clientX - rc.left, e.clientY - rc.top); if (f) showTip(e, f.pr.uid, f.pr.u, f.node); else hideTip();
+});
+cv.addEventListener("pointerup", e => { const moved = d3 && Math.abs(e.clientX - d3.x0) + Math.abs(e.clientY - d3.y0) > 4; d3 = null; if (moved) return; const rc = cv.getBoundingClientRect(); const f = hit3d(e.clientX - rc.left, e.clientY - rc.top); if (f && f.node && curRes()) togglePick(f.node); });
+cv.addEventListener("pointerleave", () => { d3 = null; hideTip(); });
+cv.addEventListener("wheel", e => { e.preventDefault(); const v = S.v3, z2 = Math.max(0.4, Math.min(10, v.zoom * (e.deltaY < 0 ? 1.12 : 0.9))), ratio = z2 / v.zoom; const rc = cv.getBoundingClientRect(); const mx = e.clientX - rc.left - rc.width / 2, my = e.clientY - rc.top - rc.height / 2; v.px = mx - (mx - v.px) * ratio; v.py = my - (my - v.py) * ratio; v.zoom = z2; draw3d(); }, { passive: false });
+cv.addEventListener("contextmenu", e => e.preventDefault());
+
+/* ============================================================ 2D (SVG) */
+const svg = $("map");
+const ringPath = (poly) => poly.map(ring => "M" + ring.map(([x, y]) => `${x} ${y}`).join("L") + "Z").join("");   // 좌표 = 왼쪽 위 원점(북쪽 위), SVG 와 같은 방향
+function el(tag, at) { const e = document.createElementNS(svg.namespaceURI, tag); for (const k in at) e.setAttribute(k, at[k]); return e; }
+function draw2d() {
+  const M = S.space; svg.innerHTML = ""; if (!M) return;
+  if (!S.v2) S.v2 = { x: 0, y: 0, w: M.W, h: M.H };
+  svg.setAttribute("viewBox", `${S.v2.x} ${S.v2.y} ${S.v2.w} ${S.v2.h}`); svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  const r = curRes(), sel = new Set(S.pick), ign = new Set(r ? r.summary.ignition_resolved || [] : []);
+  const has = b => S.floor > 0 ? S.floor <= (b.floors || 1) : -S.floor <= (b.floors_ug || 0);
+  M.buildings.forEach(b => svg.appendChild(el("path", { d: ringPath(b.poly), fill: has(b) ? "#E6E8EE" : "#F5F6F8", stroke: "#B9BDC9", "stroke-width": 0.25 })));
+  if (S.floor >= 1 && S.floor <= (M.arcade_floors || 2)) (M.arcade || []).forEach(ring => svg.appendChild(el("path", { d: ringPath([ring]), fill: "#2F55A4", "fill-opacity": 0.07, stroke: "#2F55A4", "stroke-width": 0.2, "stroke-dasharray": "1 0.6" })));
+  for (const [uid, u] of Object.entries(M.units)) {
+    if (u.f !== S.floor) continue;
+    const node = r ? nodeOfUnit(uid, u, r) : null; const col = r ? cellColor(node, r) : null;
+    const p = el("path", { d: ringPath(u.poly), fill: col || (r ? C_NONE : "#FBFBFC"), stroke: sel.has(node) ? "#2F55A4" : "#9AA0AE", "stroke-width": sel.has(node) ? 0.6 : 0.18 });
+    p.addEventListener("mousemove", e => showTip(e, uid, u, node)); p.addEventListener("mouseleave", hideTip);
+    p.addEventListener("click", () => { if (d2 && d2.moved) return; if (r && node) togglePick(node); });
+    if (isCor(u)) { p.setAttribute("fill", "#9AA0AE"); p.setAttribute("fill-opacity", 0.06); p.setAttribute("stroke", "#7A8090"); p.setAttribute("stroke-width", 0.25); p.setAttribute("stroke-dasharray", "0.8 0.5"); }   // 통로: 투명
+    svg.appendChild(p);
+  }
+  if (r) ign.forEach(n => { const c = centroid(n); if (!c) return; const t = el("text", { x: c[0], y: c[1] + 1.2, "font-size": 3.6, "text-anchor": "middle", fill: floorOfNode(n) === S.floor ? "#fff" : "#5E0B08", "font-weight": 700 }); t.textContent = "★"; svg.appendChild(t); });
+}
+function centroid(n) { const M = S.space; let polys = M.units[n] ? M.units[n].poly : Object.values(M.units).filter(u => floorId(u.b, u.f) === n).flatMap(u => u.poly); let sx = 0, sy = 0, k = 0; polys.forEach(r => r.forEach(([x, y]) => { sx += x; sy += y; k++; })); return k ? [sx / k, sy / k] : null; }
+let d2 = null;
+svg.addEventListener("wheel", e => { if (!S.v2) return; e.preventDefault(); const v = S.v2, k = e.deltaY > 0 ? 1.15 : 1 / 1.15; const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const p = pt.matrixTransform(svg.getScreenCTM().inverse()); v.x = p.x - (p.x - v.x) * k; v.y = p.y - (p.y - v.y) * k; v.w *= k; v.h *= k; svg.setAttribute("viewBox", `${v.x} ${v.y} ${v.w} ${v.h}`); }, { passive: false });
+svg.addEventListener("mousedown", e => { d2 = { x: e.clientX, y: e.clientY, vx: S.v2.x, vy: S.v2.y, moved: false }; });
+window.addEventListener("mousemove", e => { if (!d2) return; const rc = svg.getBoundingClientRect(), sc = Math.max(S.v2.w / rc.width, S.v2.h / rc.height); const dx = (e.clientX - d2.x) * sc, dy = (e.clientY - d2.y) * sc; if (Math.abs(dx) + Math.abs(dy) > 0.3) d2.moved = true; S.v2.x = d2.vx - dx; S.v2.y = d2.vy - dy; svg.setAttribute("viewBox", `${S.v2.x} ${S.v2.y} ${S.v2.w} ${S.v2.h}`); });
+window.addEventListener("mouseup", () => setTimeout(() => { d2 = null; }, 0));
+
+/* ============================================================ 툴팁 · 선택 */
+function showTip(e, uid, u, node) {
+  const r = curRes(), thr = thrOf(r), p = r && probsOf(r, node);
+  let html = `<b>${uid}</b>${u.name && u.name !== "nan" ? " · " + u.name : ""}<br><span class="muted">${u.f > 0 ? u.f + "층" : "지하" + (-u.f)} · ${u.biz || "업종 미상"} · 외피 ${u.env || "–"}${u.part ? " · 격벽 " + u.part : ""}</span>`;
+  if (r) { const k = firstStep(p, thr); html += `<br>노드 ${node}${node !== uid ? " (층 노드)" : ""}<br>${S.min}분 확률 <b>${p ? p[S.step].toFixed(2) : "0.00"}</b> · 60분 <b>${p ? p[p.length - 1].toFixed(2) : "0.00"}</b><br>` + (k != null ? `도달 ${(k + 1) * 5}분 내` : "60분 내 미착화"); }
+  const t = $("tip"), w = $("mapWrap").getBoundingClientRect(); t.innerHTML = html; t.style.display = "block";
+  t.style.left = Math.min(e.clientX - w.left + 14, w.width - 280) + "px"; t.style.top = Math.min(e.clientY - w.top + 14, w.height - 90) + "px";
+}
+function hideTip() { $("tip").style.display = "none"; }
+function togglePick(node) { const i = S.pick.indexOf(node); if (i >= 0) S.pick.splice(i, 1); else S.pick.push(node); render(); drawChart(); }
+
+/* ============================================================ 시간 */
+// 시간 막대: 수동 이동 간격 5분 고정 (모델 스텝이 5분이 아니어도 막대는 5분씩 — 그 시각이 속한 모델 스텝의 확률을 표시)
+function stepMin() { const r = curRes(); return (r && r.model && r.model.step_minutes) || 5; }
+function nSteps() { const r = curRes(); return (r && r.model && r.model.horizon_steps) || 12; }
+function maxMin() { return stepMin() * nSteps(); }
+function setMinute(m, quiet) {
+  const mx = maxMin(); m = Math.max(5, Math.min(mx, Math.round(m / 5) * 5));
+  S.min = m; S.step = Math.min(nSteps() - 1, Math.ceil(m / stepMin()) - 1);
+  $("tRange").max = mx; $("tRange").value = m; $("tLabel").textContent = `${m}분 후`;
+  if (!quiet) { render(); drawChart(); }
+}
+$("tPrev").onclick = () => { setMinute(S.min - 5); };
+$("tNext").onclick = () => { setMinute(S.min + 5); };
+$("tRange").oninput = e => { setMinute(+e.target.value, true); if (S.mode !== "time") { S.mode = "time"; document.querySelectorAll("#modeBtns button").forEach(x => x.classList.toggle("on", x.dataset.m === "time")); } render(); drawChart(); };
+$("btnPlay").onclick = () => {
+  if (S.playing) { clearInterval(S.playing); S.playing = null; $("btnPlay").textContent = "▶ 재생"; return; }
+  const max = maxMin(); if (S.min >= max) { S.min = 0; }
+  $("btnPlay").textContent = "⏸ 정지";
+  S.playing = setInterval(() => { if (S.min >= max) { clearInterval(S.playing); S.playing = null; $("btnPlay").textContent = "▶ 재생"; return; } $("tRange").value = S.min + 5; $("tRange").dispatchEvent(new Event("input")); }, 800);
+};
+
+/* ============================================================ 요약 */
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => { S.tab = b.dataset.t; document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x === b)); renderSummary(); });
+function renderSummary() {
+  const r = curRes(), W = $("tblWrap");
+  if (!r) { ["sN", "sU", "sF", "sB"].forEach(k => $(k).textContent = "–"); W.innerHTML = '<div class="empty">—</div>'; return; }
+  const sm = r.summary; $("sN").textContent = fmt(sm.n_spread_nodes); $("sU").textContent = fmt(sm.n_spread_units); $("sF").textContent = fmt(sm.n_spread_floors); $("sB").textContent = fmt(sm.n_spread_buildings);
+  const nm = n => { const u = S.space && S.space.units[n]; return u && u.name && u.name !== "nan" ? u.name : ""; };
+  let head = "", rows = "";
+  if (S.tab === "nodes") { head = "<tr><th>#</th><th>구획</th><th>상점</th><th>도달</th><th>예상(분)</th><th>최대확률</th></tr>"; rows = (sm.predicted_spread_nodes || []).map((s, i) => `<tr class="rowc" data-n="${s.node}"><td>${i + 1}</td><td>${s.node}</td><td class="wrap">${nm(s.node)}</td><td>${s.within_min}분 내</td><td>${s.eta_min}</td><td>${s.max_prob}</td></tr>`).join(""); }
+  else if (S.tab === "floors") { head = "<tr><th>층</th><th>건물</th><th>도달</th><th>예상(분)</th><th>첫 구획</th><th>호실</th></tr>"; rows = (sm.floor_summary || []).map(s => `<tr class="rowc" data-n="${s.first_node}"><td>${s.floor_id}</td><td>${s.building}</td><td>${s.within_min}분 내</td><td>${s.eta_min}</td><td>${s.first_node}</td><td>${s.n_units}</td></tr>`).join(""); }
+  else { head = "<tr><th>건물</th><th>도달</th><th>예상(분)</th><th>첫 구획</th></tr>"; rows = (sm.building_summary || []).map(s => `<tr class="rowc" data-n="${s.first_node}"><td>${s.building}</td><td>${s.within_min}분 내</td><td>${s.eta_min}</td><td>${s.first_node}</td></tr>`).join(""); }
+  W.innerHTML = rows ? `<table>${head}${rows}</table>` : '<div class="empty">60분 내 확산 예측 없음</div>';
+  W.querySelectorAll("tr.rowc").forEach(tr => tr.onclick = () => { const n = tr.dataset.n; if (S.view === "2d") { const f = floorOfNode(n); if (f != null) { S.floor = f; buildFloorButtons(); } } if (!S.pick.includes(n)) S.pick.push(n); render(); drawChart(); });
+}
+
+/* ============================================================ 확률 곡선 */
+function drawChart() {
+  const c = $("chart"); c.innerHTML = ""; const r = curRes();
+  if (!r) { $("chartNote").textContent = ""; return; }
+  const thr = thrOf(r), H = r.model ? r.model.horizon_steps : 12;
+  const ids = S.pick.length ? S.pick : (r.summary.predicted_spread_nodes || []).slice(0, 8).map(s => s.node);
+  $("chartNote").textContent = S.pick.length ? `(선택 ${S.pick.length}곳 · 다시 클릭하면 해제)` : "(지도 클릭으로 선택 · 기본은 빠른 순 8곳)";
+  const W = c.clientWidth || 380, Hh = c.clientHeight || 180, L = 34, R = 112, T = 10, B = 24;
+  c.setAttribute("viewBox", `0 0 ${W} ${Hh}`);
+  const X = k => L + (W - L - R) * k / (H - 1), Y = v => T + (Hh - T - B) * (1 - v);
+  const a = (t, at, txt) => { const e = document.createElementNS(c.namespaceURI, t); for (const k in at) e.setAttribute(k, at[k]); if (txt != null) e.textContent = txt; c.appendChild(e); return e; };
+  [0, 0.5, 1].forEach(v => { a("line", { x1: L, x2: W - R, y1: Y(v), y2: Y(v), stroke: "#E3E6EC" }); a("text", { x: L - 4, y: Y(v) + 3.5, "font-size": 9.5, "text-anchor": "end", fill: "#6b6b6b" }, v); });
+  a("line", { x1: L, x2: W - R, y1: Y(thr), y2: Y(thr), stroke: "#D7261E", "stroke-dasharray": "3 3" });
+  for (let k = 0; k < H; k++) a("text", { x: X(k), y: Hh - 8, "font-size": 9, "text-anchor": "middle", fill: "#6b6b6b" }, (k + 1) * 5);
+  a("text", { x: W - R + 4, y: Hh - 8, "font-size": 9, fill: "#6b6b6b" }, "분");
+  a("line", { x1: X(S.step), x2: X(S.step), y1: T, y2: Hh - B, stroke: "#1F2660", opacity: .45 });
+  const pal = ["#C55A11", "#2F55A4", "#1E6B3C", "#D7261E", "#7B4FA3", "#0F8B8D", "#B8860B", "#555"];
+  ids.forEach((n, i) => {
+    const p = probsOf(r, n); if (!p) return; const col = pal[i % pal.length];
+    a("polyline", { points: p.map((v, k) => `${X(k)},${Y(v)}`).join(" "), fill: "none", stroke: col, "stroke-width": 1.7 });
+    a("rect", { x: W - R + 8, y: T + i * 13, width: 10, height: 3, fill: col }); a("text", { x: W - R + 22, y: T + i * 13 + 4, "font-size": 9.5, fill: "#333" }, n);
+  });
+  if (!ids.length) a("text", { x: (W - R) / 2, y: Hh / 2, "font-size": 11, "text-anchor": "middle", fill: "#6b6b6b" }, "표시할 구획 없음");
+}
+window.addEventListener("resize", () => { render(); drawChart(); });
+reloadAll();
+</script>
+</body>
+</html>

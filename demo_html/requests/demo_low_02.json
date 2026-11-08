@@ -1,0 +1,26 @@
+{
+  "request_id": "demo_low_02",
+  "description": "[하위 2] test 샘플 97047 · t0 30분 · 기상 L59 · 칸 F1 0.000 · 60분 내 새 착화 정답 8 / 예측 0",
+  "ignition_nodes": [
+    "B160-F1"
+  ],
+  "burning_nodes": [
+    "B157-F1"
+  ],
+  "weather": {
+    "wind_speed_ms": 2.0,
+    "wind_dir_deg": 180.0,
+    "rh_pct": 90.0
+  },
+  "pick": {
+    "group": "하위",
+    "rank": 2,
+    "split": "test",
+    "sample_id": 97047,
+    "t0_s": 1800,
+    "weather_code": "L59",
+    "f1": 0.0,
+    "n_label_new_60min": 8,
+    "n_pred_new_60min": 0
+  }
+}

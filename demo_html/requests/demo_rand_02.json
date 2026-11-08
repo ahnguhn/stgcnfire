@@ -1,0 +1,18 @@
+{
+  "request_id": "demo_rand_02",
+  "description": "[랜덤 2] 모델·정답과 무관한 무작위 요청 — 발화 B80-F1-U02 · 풍속 10 m/s · 풍향 0 · 습도 90 %",
+  "ignition_nodes": [
+    "B80-F1-U02"
+  ],
+  "burning_nodes": [],
+  "weather": {
+    "wind_speed_ms": 10.0,
+    "wind_dir_deg": 0,
+    "rh_pct": 90.0
+  },
+  "pick": {
+    "group": "랜덤",
+    "rank": 2,
+    "seed": 42
+  }
+}

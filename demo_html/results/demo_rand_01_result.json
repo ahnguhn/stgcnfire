@@ -1,0 +1,627 @@
+{
+  "request_id": "demo_rand_01",
+  "generated_at": "2026-11-08 19:47:43",
+  "input": {
+    "request_id": "demo_rand_01",
+    "ignition_nodes": [
+      "B18-F1-U03"
+    ],
+    "burning_nodes": [],
+    "weather": {
+      "wind_speed_ms": 10.0,
+      "wind_dir_deg": 225,
+      "rh_pct": 60.0
+    },
+    "pick": {
+      "group": "랜덤",
+      "rank": 1,
+      "seed": 42
+    }
+  },
+  "model": {
+    "graph_dir": "D:\\workspace2026\\fire\\prototype2\\predict\\graph",
+    "model_path": "D:\\workspace2026\\fire\\prototype2\\training\\model\\best_model.pt",
+    "n_nodes": 873,
+    "horizon_steps": 12,
+    "step_minutes": 5,
+    "threshold": 0.5
+  },
+  "summary": {
+    "request_id": "demo_rand_01",
+    "ignition_nodes": [
+      "B18-F1-U03"
+    ],
+    "ignition_resolved": [
+      "B18-F1-U03"
+    ],
+    "burning_nodes_resolved": [],
+    "n_burning_t0": 1,
+    "weather": {
+      "wind_speed_ms": 10.0,
+      "wind_dir_deg": 225,
+      "rh_pct": 60.0
+    },
+    "weather_used": {
+      "wind_speed_ms": 10.0,
+      "wind_dir_deg": 225.0,
+      "rh_pct": 60.0,
+      "wind_speed_ms_input": 10.0,
+      "wind_dir_deg_input": 225,
+      "rh_pct_input": 60.0
+    },
+    "threshold": 0.5,
+    "predicted_spread_nodes": [
+      {
+        "node": "B06-F1",
+        "floor_id": "B06-F1",
+        "building": "B06",
+        "node_kind": "floor",
+        "first_step": 5,
+        "within_min": 25,
+        "eta_min": 21.4,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B06-F2",
+        "floor_id": "B06-F2",
+        "building": "B06",
+        "node_kind": "floor",
+        "first_step": 6,
+        "within_min": 30,
+        "eta_min": 26.6,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B17-F1",
+        "floor_id": "B17-F1",
+        "building": "B17",
+        "node_kind": "floor",
+        "first_step": 3,
+        "within_min": 15,
+        "eta_min": 10.7,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B18-F1-U04",
+        "floor_id": "B18-F1",
+        "building": "B18",
+        "node_kind": "unit",
+        "first_step": 1,
+        "within_min": 5,
+        "eta_min": 3.6,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B19-F1-U01",
+        "floor_id": "B19-F1",
+        "building": "B19",
+        "node_kind": "unit",
+        "first_step": 4,
+        "within_min": 20,
+        "eta_min": 18.9,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B19-F1-U02",
+        "floor_id": "B19-F1",
+        "building": "B19",
+        "node_kind": "unit",
+        "first_step": 4,
+        "within_min": 20,
+        "eta_min": 19.4,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B19-F1-U03",
+        "floor_id": "B19-F1",
+        "building": "B19",
+        "node_kind": "unit",
+        "first_step": 4,
+        "within_min": 20,
+        "eta_min": 17.5,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B19-F1-U04",
+        "floor_id": "B19-F1",
+        "building": "B19",
+        "node_kind": "unit",
+        "first_step": 4,
+        "within_min": 20,
+        "eta_min": 18.9,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B19-F1-U05",
+        "floor_id": "B19-F1",
+        "building": "B19",
+        "node_kind": "unit",
+        "first_step": 4,
+        "within_min": 20,
+        "eta_min": 18.4,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B19-F2",
+        "floor_id": "B19-F2",
+        "building": "B19",
+        "node_kind": "floor",
+        "first_step": 5,
+        "within_min": 25,
+        "eta_min": 19.8,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B19-F3",
+        "floor_id": "B19-F3",
+        "building": "B19",
+        "node_kind": "floor",
+        "first_step": 6,
+        "within_min": 30,
+        "eta_min": 27.0,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B19-F4",
+        "floor_id": "B19-F4",
+        "building": "B19",
+        "node_kind": "floor",
+        "first_step": 7,
+        "within_min": 35,
+        "eta_min": 34.3,
+        "max_prob": 1.0
+      },
+      {
+        "node": "B23-F1",
+        "floor_id": "B23-F1",
+        "building": "B23",
+        "node_kind": "floor",
+        "first_step": 8,
+        "within_min": 40,
+        "eta_min": 40.6,
+        "max_prob": 1.0
+      }
+    ],
+    "n_spread_nodes": 13,
+    "n_spread_units": 6,
+    "interior_spread_same_floor": [
+      {
+        "node": "B18-F1-U04",
+        "floor_id": "B18-F1",
+        "building": "B18",
+        "node_kind": "unit",
+        "first_step": 1,
+        "within_min": 5,
+        "eta_min": 3.6,
+        "max_prob": 1.0
+      }
+    ],
+    "n_interior_units_same_floor": 1,
+    "floor_summary": [
+      {
+        "floor_id": "B18-F1",
+        "building": "B18",
+        "within_min": 5,
+        "first_node": "B18-F1-U04",
+        "eta_min": 3.6,
+        "n_units": 1
+      },
+      {
+        "floor_id": "B17-F1",
+        "building": "B17",
+        "within_min": 15,
+        "first_node": "B17-F1",
+        "eta_min": 10.7,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B19-F1",
+        "building": "B19",
+        "within_min": 20,
+        "first_node": "B19-F1-U01",
+        "eta_min": 18.9,
+        "n_units": 5
+      },
+      {
+        "floor_id": "B06-F1",
+        "building": "B06",
+        "within_min": 25,
+        "first_node": "B06-F1",
+        "eta_min": 21.4,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B19-F2",
+        "building": "B19",
+        "within_min": 25,
+        "first_node": "B19-F2",
+        "eta_min": 19.8,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B06-F2",
+        "building": "B06",
+        "within_min": 30,
+        "first_node": "B06-F2",
+        "eta_min": 26.6,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B19-F3",
+        "building": "B19",
+        "within_min": 30,
+        "first_node": "B19-F3",
+        "eta_min": 27.0,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B19-F4",
+        "building": "B19",
+        "within_min": 35,
+        "first_node": "B19-F4",
+        "eta_min": 34.3,
+        "n_units": 0
+      },
+      {
+        "floor_id": "B23-F1",
+        "building": "B23",
+        "within_min": 40,
+        "first_node": "B23-F1",
+        "eta_min": 40.6,
+        "n_units": 0
+      }
+    ],
+    "n_spread_floors": 9,
+    "building_summary": [
+      {
+        "building": "B17",
+        "within_min": 15,
+        "first_node": "B17-F1",
+        "eta_min": 10.7
+      },
+      {
+        "building": "B19",
+        "within_min": 20,
+        "first_node": "B19-F1-U01",
+        "eta_min": 18.9
+      },
+      {
+        "building": "B06",
+        "within_min": 25,
+        "first_node": "B06-F1",
+        "eta_min": 21.4
+      },
+      {
+        "building": "B23",
+        "within_min": 40,
+        "first_node": "B23-F1",
+        "eta_min": 40.6
+      }
+    ],
+    "n_spread_buildings": 4
+  },
+  "probs": {
+    "B06-F1": [
+      0.0,
+      0.0,
+      0.0001,
+      0.2204,
+      0.8556,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B06-F2": [
+      0.0,
+      0.0001,
+      0.0003,
+      0.105,
+      0.4364,
+      0.8448,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B17-F1": [
+      0.0008,
+      0.3985,
+      0.8523,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B18-F1-U03": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B18-F1-U04": [
+      0.7744,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B18-F1-U05": [
+      0.0001,
+      0.0003,
+      0.0002,
+      0.0002,
+      0.0002,
+      0.0005,
+      0.0005,
+      0.0013,
+      0.0071,
+      0.0318,
+      0.0769,
+      0.1688
+    ],
+    "B19-F1-U01": [
+      0.001,
+      0.0581,
+      0.3164,
+      0.6258,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B19-F1-U02": [
+      0.0011,
+      0.0687,
+      0.2365,
+      0.6169,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B19-F1-U03": [
+      0.0004,
+      0.0664,
+      0.2403,
+      0.6345,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B19-F1-U04": [
+      0.0011,
+      0.0618,
+      0.3248,
+      0.6361,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B19-F1-U05": [
+      0.001,
+      0.0641,
+      0.3328,
+      0.6437,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B19-F2": [
+      0.0016,
+      0.1089,
+      0.2824,
+      0.4505,
+      0.9041,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B19-F3": [
+      0.0019,
+      0.0035,
+      0.0012,
+      0.0006,
+      0.001,
+      0.7914,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B19-F4": [
+      0.0038,
+      0.0238,
+      0.022,
+      0.0224,
+      0.0288,
+      0.0348,
+      0.7325,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B23-F1": [
+      0.0,
+      0.0025,
+      0.0022,
+      0.0194,
+      0.046,
+      0.1526,
+      0.2988,
+      0.5363,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B24-F1": [
+      0.0,
+      0.0002,
+      0.0009,
+      0.0031,
+      0.0054,
+      0.0084,
+      0.0139,
+      0.0244,
+      0.0411,
+      0.1051,
+      0.158,
+      0.2297
+    ]
+  },
+  "nodes": [
+    {
+      "id": "B06-F1",
+      "kind": "floor",
+      "building": "B06",
+      "floor_id": "B06-F1"
+    },
+    {
+      "id": "B06-F2",
+      "kind": "floor",
+      "building": "B06",
+      "floor_id": "B06-F2"
+    },
+    {
+      "id": "B17-F1",
+      "kind": "floor",
+      "building": "B17",
+      "floor_id": "B17-F1"
+    },
+    {
+      "id": "B18-F1-U03",
+      "kind": "unit",
+      "building": "B18",
+      "floor_id": "B18-F1"
+    },
+    {
+      "id": "B18-F1-U04",
+      "kind": "unit",
+      "building": "B18",
+      "floor_id": "B18-F1"
+    },
+    {
+      "id": "B18-F1-U05",
+      "kind": "unit",
+      "building": "B18",
+      "floor_id": "B18-F1"
+    },
+    {
+      "id": "B19-F1-U01",
+      "kind": "unit",
+      "building": "B19",
+      "floor_id": "B19-F1"
+    },
+    {
+      "id": "B19-F1-U02",
+      "kind": "unit",
+      "building": "B19",
+      "floor_id": "B19-F1"
+    },
+    {
+      "id": "B19-F1-U03",
+      "kind": "unit",
+      "building": "B19",
+      "floor_id": "B19-F1"
+    },
+    {
+      "id": "B19-F1-U04",
+      "kind": "unit",
+      "building": "B19",
+      "floor_id": "B19-F1"
+    },
+    {
+      "id": "B19-F1-U05",
+      "kind": "unit",
+      "building": "B19",
+      "floor_id": "B19-F1"
+    },
+    {
+      "id": "B19-F2",
+      "kind": "floor",
+      "building": "B19",
+      "floor_id": "B19-F2"
+    },
+    {
+      "id": "B19-F3",
+      "kind": "floor",
+      "building": "B19",
+      "floor_id": "B19-F3"
+    },
+    {
+      "id": "B19-F4",
+      "kind": "floor",
+      "building": "B19",
+      "floor_id": "B19-F4"
+    },
+    {
+      "id": "B23-F1",
+      "kind": "floor",
+      "building": "B23",
+      "floor_id": "B23-F1"
+    },
+    {
+      "id": "B24-F1",
+      "kind": "floor",
+      "building": "B24",
+      "floor_id": "B24-F1"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "request_id": "demo_low_01",
+  "generated_at": "2026-11-08 19:47:43",
+  "input": {
+    "request_id": "demo_low_01",
+    "ignition_nodes": [
+      "B120-F1"
+    ],
+    "burning_nodes": [],
+    "weather": {
+      "wind_speed_ms": 10.0,
+      "wind_dir_deg": 45.0,
+      "rh_pct": 90.0
+    },
+    "pick": {
+      "group": "하위",
+      "rank": 1,
+      "split": "test",
+      "sample_id": 67551,
+      "t0_s": 1800,
+      "weather_code": "H29",
+      "f1": 0.0,
+      "n_label_new_60min": 43,
+      "n_pred_new_60min": 0
+    }
+  },
+  "model": {
+    "graph_dir": "D:\\workspace2026\\fire\\prototype2\\predict\\graph",
+    "model_path": "D:\\workspace2026\\fire\\prototype2\\training\\model\\best_model.pt",
+    "n_nodes": 873,
+    "horizon_steps": 12,
+    "step_minutes": 5,
+    "threshold": 0.5
+  },
+  "summary": {
+    "request_id": "demo_low_01",
+    "ignition_nodes": [
+      "B120-F1"
+    ],
+    "ignition_resolved": [
+      "B120-F1"
+    ],
+    "burning_nodes_resolved": [],
+    "n_burning_t0": 1,
+    "weather": {
+      "wind_speed_ms": 10.0,
+      "wind_dir_deg": 45.0,
+      "rh_pct": 90.0
+    },
+    "weather_used": {
+      "wind_speed_ms": 10.0,
+      "wind_dir_deg": 45.0,
+      "rh_pct": 90.0,
+      "wind_speed_ms_input": 10.0,
+      "wind_dir_deg_input": 45.0,
+      "rh_pct_input": 90.0
+    },
+    "threshold": 0.5,
+    "predicted_spread_nodes": [],
+    "n_spread_nodes": 0,
+    "n_spread_units": 0,
+    "interior_spread_same_floor": [],
+    "n_interior_units_same_floor": 0,
+    "floor_summary": [],
+    "n_spread_floors": 0,
+    "building_summary": [],
+    "n_spread_buildings": 0
+  },
+  "probs": {
+    "B120-F1": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "B126-F1": [
+      0.0028,
+      0.0186,
+      0.0512,
+      0.0669,
+      0.0749,
+      0.0914,
+      0.1025,
+      0.1251,
+      0.1587,
+      0.2348,
+      0.342,
+      0.4361
+    ]
+  },
+  "nodes": [
+    {
+      "id": "B120-F1",
+      "kind": "floor",
+      "building": "B120",
+      "floor_id": "B120-F1"
+    },
+    {
+      "id": "B126-F1",
+      "kind": "floor",
+      "building": "B126",
+      "floor_id": "B126-F1"
+    }
+  ]
+}

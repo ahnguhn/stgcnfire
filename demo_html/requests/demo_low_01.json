@@ -1,0 +1,24 @@
+{
+  "request_id": "demo_low_01",
+  "description": "[하위 1] test 샘플 67551 · t0 30분 · 기상 H29 · 칸 F1 0.000 · 60분 내 새 착화 정답 43 / 예측 0",
+  "ignition_nodes": [
+    "B120-F1"
+  ],
+  "burning_nodes": [],
+  "weather": {
+    "wind_speed_ms": 10.0,
+    "wind_dir_deg": 45.0,
+    "rh_pct": 90.0
+  },
+  "pick": {
+    "group": "하위",
+    "rank": 1,
+    "split": "test",
+    "sample_id": 67551,
+    "t0_s": 1800,
+    "weather_code": "H29",
+    "f1": 0.0,
+    "n_label_new_60min": 43,
+    "n_pred_new_60min": 0
+  }
+}

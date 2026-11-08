@@ -1,0 +1,24 @@
+{
+  "request_id": "demo_top_01",
+  "description": "[상위 1] test 샘플 100936 · t0 0분 · 기상 H16 · 칸 F1 0.993 · 60분 내 새 착화 정답 9 / 예측 10",
+  "ignition_nodes": [
+    "B168-F1-U03"
+  ],
+  "burning_nodes": [],
+  "weather": {
+    "wind_speed_ms": 10.0,
+    "wind_dir_deg": 0.0,
+    "rh_pct": 60.0
+  },
+  "pick": {
+    "group": "상위",
+    "rank": 1,
+    "split": "test",
+    "sample_id": 100936,
+    "t0_s": 0,
+    "weather_code": "H16",
+    "f1": 0.993,
+    "n_label_new_60min": 9,
+    "n_pred_new_60min": 10
+  }
+}

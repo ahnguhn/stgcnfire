@@ -1,0 +1,18 @@
+{
+  "request_id": "demo_rand_03",
+  "description": "[랜덤 3] 모델·정답과 무관한 무작위 요청 — 발화 B38-F1 · 풍속 0 m/s · 풍향 None · 습도 60 %",
+  "ignition_nodes": [
+    "B38-F1"
+  ],
+  "burning_nodes": [],
+  "weather": {
+    "wind_speed_ms": 0.0,
+    "wind_dir_deg": null,
+    "rh_pct": 60.0
+  },
+  "pick": {
+    "group": "랜덤",
+    "rank": 3,
+    "seed": 42
+  }
+}
